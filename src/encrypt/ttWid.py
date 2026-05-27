@@ -1,17 +1,14 @@
 from asyncio import run
 from http import cookies
 from json import dumps
-from typing import TYPE_CHECKING
-from typing import Union
+from typing import TYPE_CHECKING, Union
 
-from src.custom import PARAMS_HEADERS
-from src.custom import PARAMS_HEADERS_TIKTOK
+from src.custom import PARAMS_HEADERS, PARAMS_HEADERS_TIKTOK
 from src.tools import request_params
 from src.translation import _
 
 if TYPE_CHECKING:
-    from src.record import BaseLogger
-    from src.record import LoggerManager
+    from src.record import BaseLogger, LoggerManager
     from src.testers import Logger
 
 __all__ = ["TtWid", "TtWidTikTok"]
@@ -22,31 +19,32 @@ class TtWid:
     API = "https://ttwid.bytedance.com/ttwid/union/register/"
     DATA = (
         '{"region":"cn","aid":1768,"needFid":false,"service":"www.ixigua.com","migrate_info":{"ticket":"",'
-        '"source":"node"},"cbUrlProtocol":"https","union":true}')
+        '"source":"node"},"cbUrlProtocol":"https","union":true}'
+    )
 
     @classmethod
     async def get_tt_wid(
-            cls,
-            logger: Union["BaseLogger", "LoggerManager", "Logger"],
-            headers: dict,
-            proxy: str = None,
-            **kwargs,
+        cls,
+        logger: Union["BaseLogger", "LoggerManager", "Logger"],
+        headers: dict,
+        proxy: str = None,
+        **kwargs,
     ) -> dict | None:
         if response := await request_params(
-                logger,
-                cls.API,
-                data=cls.DATA,
-                headers=headers,
-                proxy=proxy,
-                **kwargs, ):
+            logger,
+            cls.API,
+            data=cls.DATA,
+            headers=headers,
+            proxy=proxy,
+            **kwargs,
+        ):
             return cls.extract(logger, response, cls.NAME)
         logger.error(_("获取 {name} 参数失败！").format(name=cls.NAME))
 
     @staticmethod
     def extract(
-            logger: Union["BaseLogger", "LoggerManager", "Logger"],
-            headers,
-            key: str) -> dict | None:
+        logger: Union["BaseLogger", "LoggerManager", "Logger"], headers, key: str
+    ) -> dict | None:
         if c := headers.get("Set-Cookie"):
             cookie_jar = cookies.SimpleCookie()
             cookie_jar.load(c)
@@ -65,30 +63,31 @@ class TtWidTikTok(TtWid):
             "unionHost": "",
             "needFid": False,
             "fid": "",
-            "migrate_priority": 0
+            "migrate_priority": 0,
         },
-        separators=(',', ':'),
+        separators=(",", ":"),
     )
 
     @classmethod
     async def get_tt_wid(
-            cls,
-            logger: Union["BaseLogger", "LoggerManager", "Logger"],
-            headers: dict,
-            cookie: str = "",
-            proxy: str = None,
-            **kwargs,
+        cls,
+        logger: Union["BaseLogger", "LoggerManager", "Logger"],
+        headers: dict,
+        cookie: str = "",
+        proxy: str = None,
+        **kwargs,
     ) -> dict | None:
         if response := await request_params(
-                logger,
-                cls.API,
-                data=cls.DATA,
-                headers=headers | {
-                    "Cookie": cookie,
-                    "Content-Type": "application/x-www-form-urlencoded",
-                },
-                proxy=proxy,
-                **kwargs,
+            logger,
+            cls.API,
+            data=cls.DATA,
+            headers=headers
+            | {
+                "Cookie": cookie,
+                "Content-Type": "application/x-www-form-urlencoded",
+            },
+            proxy=proxy,
+            **kwargs,
         ):
             return cls.extract(logger, response, cls.NAME)
         logger.error(_("获取 {name} 参数失败！").format(name=cls.NAME))
@@ -96,14 +95,17 @@ class TtWidTikTok(TtWid):
 
 async def test():
     from src.testers import Logger
+
     print("抖音", await TtWid.get_tt_wid(Logger(), PARAMS_HEADERS, proxy=None))
-    print("TikTok",
-          await TtWidTikTok.get_tt_wid(
-              Logger(),
-              PARAMS_HEADERS_TIKTOK,
-              cookie="ttwid=",
-              proxy="http://localhost:10809",
-          ))
+    print(
+        "TikTok",
+        await TtWidTikTok.get_tt_wid(
+            Logger(),
+            PARAMS_HEADERS_TIKTOK,
+            cookie="ttwid=",
+            proxy="http://localhost:10809",
+        ),
+    )
 
 
 if __name__ == "__main__":

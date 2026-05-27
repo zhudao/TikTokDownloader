@@ -1,11 +1,20 @@
 from asyncio import sleep
-from random import randint
+from math import log
+from random import lognormvariate
 from typing import TYPE_CHECKING
 
-from ..translation import _
+from src.translation import _
 
 if TYPE_CHECKING:
-    from ..tools import ColorfulConsole
+    from src.tools import ColorfulConsole
+
+
+def get_wait_time(
+    avg_delay: float | int = 6.0,
+    sigma: float = 0.6,
+) -> float:
+    mu = log(avg_delay) - (sigma**2 / 2)
+    return max(0.5, lognormvariate(mu, sigma))
 
 
 async def wait() -> None:
@@ -13,9 +22,7 @@ async def wait() -> None:
     设置网络请求间隔时间，仅对获取数据生效，不影响下载文件
     """
     # 随机延时
-    await sleep(randint(15, 45) * 0.1)
-    # 固定延时
-    # await sleep(2)
+    await sleep(get_wait_time())
     # 取消延时
     # pass
 
@@ -23,9 +30,9 @@ async def wait() -> None:
 def failure_handling() -> bool:
     """批量下载账号作品模式 和 批量下载合集作品模式 获取数据失败时，是否继续执行"""
     # 询问用户
-    return bool(input(_("输入任意字符继续处理账号/合集，直接回车停止处理账号/合集: ")))
+    # return bool(input(_("输入任意字符继续处理账号/合集，直接回车停止处理账号/合集: ")))
     # 继续执行
-    # return True
+    return True
     # 结束执行
     # return False
 
@@ -53,17 +60,16 @@ async def suspend(count: int, console: "ColorfulConsole") -> None:
     if not count % batches:
         rest_time = 60 * 5  # 根据实际需求修改
         console.print(
-            _("程序连续处理了 {batches} 个数据，为了避免请求频率过高导致账号或 IP 被风控，"
-              "程序已经暂停运行，将在 {rest_time} 秒后恢复运行！").format(
-                batches=batches,
-                rest_time=rest_time
-            ),
+            _(
+                "程序连续处理了 {batches} 个数据，为了避免请求频率过高导致账号或 IP 被风控，"
+                "程序已经暂停运行，将在 {rest_time} 秒后恢复运行！"
+            ).format(batches=batches, rest_time=rest_time),
         )
         await sleep(rest_time)
     # 禁用该函数
     # pass
 
 
-def verify_token(token: str) -> bool:
-    """Web API 接口模式 和 服务器部署模式 设置 token 参数验证"""
+def is_valid_token(token: str) -> bool:
+    """Web API 接口模式 和 Web UI 交互模式 token 参数验证"""
     return True

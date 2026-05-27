@@ -5,11 +5,11 @@ from typing import TYPE_CHECKING
 from typing import Union
 
 from src.interface.template import API
-from src.testers import Params
 from src.translation import _
 
 if TYPE_CHECKING:
     from src.config import Parameter
+    from src.testers import Params
 
 
 class Hot(API):
@@ -36,21 +36,26 @@ class Hot(API):
         ),
     )
 
-    def __init__(self,
-                 params: Union["Parameter", Params],
-                 cookie: str = None,
-                 proxy: str = None,
-                 *args,
-                 **kwargs,
-                 ):
-        super().__init__(params, cookie, proxy, *args, **kwargs, )
-        self.headers = self.headers | {"Cookie": "", }
+    def __init__(
+        self,
+        params: Union["Parameter", "Params"],
+        cookie: str = "",
+        proxy: str = None,
+        *args,
+        **kwargs,
+    ):
+        super().__init__(params, cookie, proxy, *args, **kwargs)
+        self.headers = self.headers | {
+            "Cookie": "",
+        }
         self.api = f"{self.domain}aweme/v1/web/hot/search/list/"
         self.text = _("热榜")
         self.index = None
         self.time = None
 
-    def generate_params(self, ) -> dict:
+    def generate_params(
+        self,
+    ) -> dict:
         return self.params | {
             "detail_list": "1",
             "source": "6",
@@ -60,20 +65,21 @@ class Hot(API):
             "version_name": "17.4.0",
         }
 
-    async def run(self,
-                  referer: str = "https://www.douyin.com/discover",
-                  single_page=True,
-                  data_key: str = None,
-                  error_text=None,
-                  cursor=None,
-                  has_more=None,
-                  params: Callable = lambda: {},
-                  data: Callable = lambda: {},
-                  method="GET",
-                  headers: dict = None,
-                  *args,
-                  **kwargs,
-                  ):
+    async def run(
+        self,
+        referer: str = "https://www.douyin.com/discover",
+        single_page=True,
+        data_key: str = None,
+        error_text=None,
+        cursor=None,
+        has_more=None,
+        params: Callable = lambda: {},
+        data: Callable = lambda: {},
+        method="GET",
+        headers: dict = None,
+        *args,
+        **kwargs,
+    ):
         self.time = f"{datetime.now():%Y_%m_%d_%H_%M_%S}"
         self.set_referer(referer)
         for index, space in enumerate(self.board_params):
@@ -94,26 +100,31 @@ class Hot(API):
             )
         return self.time, self.response
 
-    def check_response(self,
-                       data_dict: dict,
-                       data_key: str = None,
-                       error_text=None,
-                       cursor=None,
-                       has_more=None,
-                       index: int = None,
-                       *args,
-                       **kwargs,
-                       ):
+    def check_response(
+        self,
+        data_dict: dict,
+        data_key: str = None,
+        error_text=None,
+        cursor=None,
+        has_more=None,
+        index: int = None,
+        *args,
+        **kwargs,
+    ):
         try:
             if not (d := data_dict["data"]["word_list"]):
                 self.log.info(error_text)
             else:
                 self.response.append((index, d))
         except KeyError:
-            self.log.error(_("数据解析失败，请告知作者处理: {data}").format(data=data_dict))
+            self.log.error(
+                _("数据解析失败，请告知作者处理: {data}").format(data=data_dict)
+            )
 
 
 async def test():
+    from src.testers import Params
+
     async with Params() as params:
         i = Hot(
             params,

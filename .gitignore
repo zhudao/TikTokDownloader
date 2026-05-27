@@ -1,6 +1,8 @@
-*.db
-*.json
-*.log
-*.xlsx
-*.csv
-*.spec
+__pycache__/
+*.pyc
+/.venv/
+/.ruff_cache/
+/.idea/
+/.run/
+/Volume/
+!/.github/
