@@ -19,8 +19,8 @@
 <p>⭐ 本项目历史名称：<code>TikTokDownloader</code></p>
 </div>
 <hr>
-<p>⚠️ 当前版本部分功能已失效。项目计划在 <code>6.0</code> 版本进行重构，重构完成后将会修复部分失效的功能！</p>
-<p>⚠️ 本项目的加密参数算法已过期失效；为确保项目合法合规，参数算法不再维护，部分功能可能无法正常工作。如需使用，请自行准备加密参数生成代码，配置方法请查阅 <a href="https://github.com/JoeanAmier/TikTokDownloader/wiki/Documentation#%E5%8A%A0%E5%AF%86%E5%8F%82%E6%95%B0%E7%94%9F%E6%88%90%E4%BB%A3%E7%A0%81%E9%85%8D%E7%BD%AE">文档</a>！</p>
+<p>⚠️ 项目计划在 <code>6.0</code> 版本进行彻底重构，预期重构完成后支持 <code>GUI</code> 或者 <code>WebUI</code>！</p>
+<p>⚠️ 为确保项目合法合规，本项目的加密参数算法不再维护；如因平台更新导致部分功能无法正常工作，请自行准备加密参数生成代码，配置方法请查阅 <a href="https://github.com/JoeanAmier/TikTokDownloader/wiki/Documentation#%E5%8A%A0%E5%AF%86%E5%8F%82%E6%95%B0%E7%94%9F%E6%88%90%E4%BB%A3%E7%A0%81%E9%85%8D%E7%BD%AE">文档</a>！</p>
 <hr>
 
 # 📝 项目功能
@@ -129,7 +129,7 @@ demo()
 <p>⭐ 本项目包含自动构建可执行文件的 GitHub Actions，使用者可以随时使用 GitHub Actions 将最新源码构建为可执行文件！</p>
 <p>⭐ 自动构建可执行文件教程请查阅本文档的 <code>构建可执行文件指南</code> 部分；如果需要更加详细的图文教程，请 <a href="https://mp.weixin.qq.com/s/TorfoZKkf4-x8IBNLImNuw">查阅文章</a>！</p>
 <p><strong>注意：由于 Mac OS 平台的可执行文件 <code>main</code> 未经过代码签名，首次运行时会受到系统安全限制。请先在终端执行 <code>xattr -cr 项目文件夹路径</code> 命令移除安全标记，执行一次后即可正常运行。</strong></p>
-<p><strong><a href="https://nodejs.org/">Node.js</a>（可选依赖）</strong>：部分功能依赖 Node.js 执行 JavaScript 代码，需要 Node.js 18 及以上版本；建议使用者自行安装，未安装时部分功能可能受到影响。</p>
+<p><strong><a href="https://nodejs.org/">Node.js</a>（可选依赖）</strong>：<del>部分功能依赖 Node.js 执行 JavaScript 代码，需要 Node.js 18 及以上版本；建议使用者自行安装，未安装时部分功能可能受到影响。</del></p>
 <hr>
 <ol>
 <li><b>运行可执行文件</b> 或者 <b>配置环境运行</b>（二选一）
@@ -415,12 +415,11 @@ A: 由于权限限制，您无法直接触发主仓库的 Actions。请通过 Fo
 <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=JoeanAmier/TikTokDownloader&type=timeline&legend=bottom-right&sealed_token=_T_oN4xPDhh9ew5nz-OYOAjczkaYr6UUekQ5dTCrnmtR9kk5mM6h5fdHGJRy4ZaLEb36r8gSCrMfot4pk2E5lYzH-Ixk6eFOmmk1sNViVxsf-lkDYaQsbR9awBGeFyASWSX_RV10hHOWQEivZXRp4n9hcpf02mpReiwPVJHdQPXJryOXo1jDXlTF2UoX" />
 </p>
 
-# 💡 项目参考
+# 💡 参考与致谢
 
-* https://github.com/Johnserf-Seed/f2
 * https://github.com/Evil0ctal/Douyin_TikTok_Download_API
+* https://github.com/Johnserf-Seed/f2
 * https://github.com/ihmily/DouyinLiveRecorder
-* https://github.com/xvhuan/tiktok-web-params
 * https://github.com/lexiforest/curl_cffi/
 * https://github.com/Textualize/rich
 * https://github.com/omnilib/aiosqlite
